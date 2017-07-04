@@ -50,7 +50,7 @@ activate :s3_sync do |s3_sync|
   s3_sync.reduced_redundancy_storage = false
   s3_sync.acl                        = 'public-read'
   s3_sync.encryption                 = false
-  s3_sync.prefix                     = 'widget/v3'
+  s3_sync.prefix                     = 'sdk/ios'
   s3_sync.version_bucket             = false
   s3_sync.index_document             = 'index.html'
   s3_sync.error_document             = '404.html'
