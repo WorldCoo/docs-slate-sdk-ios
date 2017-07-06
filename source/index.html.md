@@ -53,13 +53,11 @@ Keys should be included in a property list named ApiKeys.plist.
 If everything has been declared in a proper way, the SDK method init(..) will load the keys automatically.
 
 
-# 3 - Usage
-
-## 3.1 - Common
+# 3 - Initialization
 
 These are the common public properties and methods, both for API integration and Widget injection
 
-### 3.1.1 - static sharedInstance
+## 3.1 - static sharedInstance
 
 _Return the instance of the SDK._
 
@@ -68,7 +66,7 @@ _Return the instance of the SDK._
 * Worldcoo’s SDK instance
 
 
-### 3.1.2 - func initSDK(productionMode: Bool)
+## 3.2 - func initSDK(productionMode: Bool)
 
 _Initializes the SDK_
 
@@ -82,7 +80,7 @@ _Initializes the SDK_
 * False if some errors occurs loading API keys
  
  
-### 3.1.3 - var productionMode
+## 3.3 - var productionMode
  
 _Returns Donor API mode_
 
@@ -92,12 +90,30 @@ _Returns Donor API mode_
 
 
 
-## 3.2 - API integration
+# 4 - API integration
+
+> API integration example
+
+```swift
+// SDK initialization
+var sdk: WorldcooSDK = Worldcoo.getInstance sdk.initSdk(productionMode: false)
+
+// Donor API Client
+sdk.getAPIClient().getAvailableNGOs(listener: self) // Being call from a controller that implements NativeListener interface
+
+// This will be received from callback:
+onAvailableNGOs(ngos: [NGO])
+
+// If there are errors
+onError(error: ErrorBody, request: RequestType)
+
+// Same way to proceed with all API methods
+```
 
 These are the public methods provided by the SDK to interact with the Worldcoo Donation API.
 
 
-### 3.2.1 - func getAPIClient(listener: DonorListener)
+## 4.1 - func getAPIClient(listener: DonorListener)
 
 _Returns a client to easily interact with the Donor web API_
 
@@ -110,7 +126,39 @@ _Returns a client to easily interact with the Donor web API_
 * DonorAPIClient instance
 
 
-### 3.2.2 - func getAvailableNGOs(offset: Int, limit: Int)
+## 4.2 - func getAvailableNGOs(offset: Int, limit: Int)
+
+> Response example
+
+```swift
+[
+    {
+        "id": "8720fdd5-1b10-a4c8-a614",
+        "name": "NGO Name Example 1",
+        "url": "http://www.examplengo1.com",
+        "description": "This is an example of NGO description."
+        "logos": {
+            "S": "https://cdn.worldcoo.com/ngos/ee80cf92-d49b-4b7c-9949-9946750ec451/logo.1479742005411.S.jpg",
+            "M": "https://cdn.worldcoo.com/ngos/ee80cf92-d49b-4b7c-9949-9946750ec451/logo.1479742005411.M.jpg",
+            "L": "https://cdn.worldcoo.com/ngos/ee80cf92-d49b-4b7c-9949-9946750ec451/logo.1479742005411.L.jpg"
+        },
+        "media": {},
+    },
+    {
+        "id": "6582d7k1-7d61-99dc-b213",
+        "name": "NGO Name Example 2",
+        "url": "http://www.examplengo2.com",
+        "description": "This is an example of NGO description."
+        "logos": {
+            "S": "https://cdn.worldcoo.com/ngos/ee80cf92-d49b-4b7c-9949-9946750ec451/logo.1479742005411.S.jpg",
+            "M": "https://cdn.worldcoo.com/ngos/ee80cf92-d49b-4b7c-9949-9946750ec451/logo.1479742005411.M.jpg",
+            "L": "https://cdn.worldcoo.com/ngos/ee80cf92-d49b-4b7c-9949-9946750ec451/logo.1479742005411.L.jpg"
+        },
+        "media": {},
+    },
+    ...
+]
+```
 
 <aside class="notice">
     This method is a wrapper for the <a href="http://docs.worldcoo.com/api/v3/#get-available-ngos" target="_blank">Get Available NGOs</a> Worldcoo API endpoint.
@@ -133,7 +181,73 @@ _Gets available NGOs_
 * _type_ : GET_NGOS
 
 
-### 3.2.3 - func getAvailableCampaigns(ngoId: String, offset: Int, limit: Int)
+## 4.3 - func getAvailableCampaigns(ngoId: String, offset: Int, limit: Int)
+
+> Response example
+
+```swift
+[
+    {
+        "id": "a9fb530d-6270-0cc7-e8a8",
+        "alias": "Demo campaign",
+        "ngo_id": "2454de2c-cb31-44e5-83bd",
+        "status": "active",
+        "location": {
+            "country": "ESP",
+            "name": "Barcelona"
+        },
+        "categories": ["water_and_energy", "hunger_and_food_security"],
+        "currency": "EUR",
+        "collection_objective": {
+            "total": 500,
+            "distribution": {
+                "materials": 100,
+                "team": 100,
+                "transport": 50,
+                "others": 200,
+                "providers": 50
+            }
+        },
+        "beneficiaries": {
+            "direct": 400,
+            "indirect": 1000
+        },
+        "starting_date": 1464277166,
+        "ending_date": null,
+        "media": {
+            "eaba63b5-d7be-4de8-a53e-283c9104a9a6": {
+                "S": "https://cdn.worldcoo.com/ngos/ee80cf92-d49b-4b7c-9949-9946750ec451/campaigns/f6425839-1e6f-4dd2-8d4d-593d61f5437f/media/eaba63b5-d7be-4de8-a53e-283c9104a9a6.1479739685956.S.jpg",
+                "L": "https://cdn.worldcoo.com/ngos/ee80cf92-d49b-4b7c-9949-9946750ec451/campaigns/f6425839-1e6f-4dd2-8d4d-593d61f5437f/media/eaba63b5-d7be-4de8-a53e-283c9104a9a6.1479739685956.L.jpg",
+                "M": "https://cdn.worldcoo.com/ngos/ee80cf92-d49b-4b7c-9949-9946750ec451/campaigns/f6425839-1e6f-4dd2-8d4d-593d61f5437f/media/eaba63b5-d7be-4de8-a53e-283c9104a9a6.1479739685956.M.jpg",
+                "XL": "https://cdn.worldcoo.com/ngos/ee80cf92-d49b-4b7c-9949-9946750ec451/campaigns/f6425839-1e6f-4dd2-8d4d-593d61f5437f/media/eaba63b5-d7be-4de8-a53e-283c9104a9a6.1479739685956.XL.jpg"
+            },
+            "89bfea45-5704-4e4b-9aab-b80c3ac1fa9c": {
+                "S": "https://cdn.worldcoo.com/ngos/ee80cf92-d49b-4b7c-9949-9946750ec451/campaigns/f6425839-1e6f-4dd2-8d4d-593d61f5437f/media/eaba63b5-d7be-4de8-a53e-283c9104a9a6.1479739685956.S.jpg",
+                "L": "https://cdn.worldcoo.com/ngos/ee80cf92-d49b-4b7c-9949-9946750ec451/campaigns/f6425839-1e6f-4dd2-8d4d-593d61f5437f/media/eaba63b5-d7be-4de8-a53e-283c9104a9a6.1479739685956.L.jpg",
+                "M": "https://cdn.worldcoo.com/ngos/ee80cf92-d49b-4b7c-9949-9946750ec451/campaigns/f6425839-1e6f-4dd2-8d4d-593d61f5437f/media/eaba63b5-d7be-4de8-a53e-283c9104a9a6.1479739685956.M.jpg",
+                "XL": "https://cdn.worldcoo.com/ngos/ee80cf92-d49b-4b7c-9949-9946750ec451/campaigns/f6425839-1e6f-4dd2-8d4d-593d61f5437f/media/eaba63b5-d7be-4de8-a53e-283c9104a9a6.1479739685956.XL.jpg"
+            }
+        },
+        "counters": {
+            "donors": 467,
+            "donated": 5035
+        },
+        "texts": {
+            "name": "NGO Campaign 1",
+            "name_short": "Cmpgn 1",
+            "resume": "This is an example of campaign description.",
+            "resume_short": "CampaignDescription",
+            "activities": "",
+            "objectives": "",
+            "benefits": "",
+            "call_to_action": "",
+            "worldcoo_url": ""
+        }
+    },
+    ...
+]
+```
+
 
 <aside class="notice">
     This method is a wrapper for the <a href="http://docs.worldcoo.com/api/v3/#get-available-campaigns" target="_blank">Get available campaigns</a> Worldcoo API endpoint.
@@ -157,7 +271,109 @@ _Gets available campaign from an NGO._
 * _type_ : GET_CAMPAIGNS
 
 
-### 3.2.4 - func addDonation(donation: Donation)
+## 4.4 - func getCampaignDetails(ngoId: String, campaignId: String)
+
+> Response example
+
+```swift
+{
+    "id": "a9fb530d-6270-0cc7-e8a8",
+    "alias": "Demo campaign",
+    "ngo_id": "2454de2c-cb31-44e5-83bd",
+    "status": "active",
+    "location": {
+        "country": "ESP",
+        "name": "Barcelona"
+    },
+    "categories": ["water_and_energy", "hunger_and_food_security"],
+    "currency": "EUR",
+    "collection_objective": {
+        "total": 500,
+        "distribution": {
+            "materials": 100,
+            "team": 100,
+            "transport": 50,
+            "others": 200,
+            "providers": 50
+        }
+    },
+    "beneficiaries": {
+        "direct": 400,
+        "indirect": 1000
+    },
+    "starting_date": 1464277166,
+    "ending_date": null,
+    "media": {
+        "eaba63b5-d7be-4de8-a53e-283c9104a9a6": {
+            "S": "https://cdn.worldcoo.com/ngos/ee80cf92-d49b-4b7c-9949-9946750ec451/campaigns/f6425839-1e6f-4dd2-8d4d-593d61f5437f/media/eaba63b5-d7be-4de8-a53e-283c9104a9a6.1479739685956.S.jpg",
+            "L": "https://cdn.worldcoo.com/ngos/ee80cf92-d49b-4b7c-9949-9946750ec451/campaigns/f6425839-1e6f-4dd2-8d4d-593d61f5437f/media/eaba63b5-d7be-4de8-a53e-283c9104a9a6.1479739685956.L.jpg",
+            "M": "https://cdn.worldcoo.com/ngos/ee80cf92-d49b-4b7c-9949-9946750ec451/campaigns/f6425839-1e6f-4dd2-8d4d-593d61f5437f/media/eaba63b5-d7be-4de8-a53e-283c9104a9a6.1479739685956.M.jpg",
+            "XL": "https://cdn.worldcoo.com/ngos/ee80cf92-d49b-4b7c-9949-9946750ec451/campaigns/f6425839-1e6f-4dd2-8d4d-593d61f5437f/media/eaba63b5-d7be-4de8-a53e-283c9104a9a6.1479739685956.XL.jpg"
+        },
+        "89bfea45-5704-4e4b-9aab-b80c3ac1fa9c": {
+            "S": "https://cdn.worldcoo.com/ngos/ee80cf92-d49b-4b7c-9949-9946750ec451/campaigns/f6425839-1e6f-4dd2-8d4d-593d61f5437f/media/eaba63b5-d7be-4de8-a53e-283c9104a9a6.1479739685956.S.jpg",
+            "L": "https://cdn.worldcoo.com/ngos/ee80cf92-d49b-4b7c-9949-9946750ec451/campaigns/f6425839-1e6f-4dd2-8d4d-593d61f5437f/media/eaba63b5-d7be-4de8-a53e-283c9104a9a6.1479739685956.L.jpg",
+            "M": "https://cdn.worldcoo.com/ngos/ee80cf92-d49b-4b7c-9949-9946750ec451/campaigns/f6425839-1e6f-4dd2-8d4d-593d61f5437f/media/eaba63b5-d7be-4de8-a53e-283c9104a9a6.1479739685956.M.jpg",
+            "XL": "https://cdn.worldcoo.com/ngos/ee80cf92-d49b-4b7c-9949-9946750ec451/campaigns/f6425839-1e6f-4dd2-8d4d-593d61f5437f/media/eaba63b5-d7be-4de8-a53e-283c9104a9a6.1479739685956.XL.jpg"
+        }
+    },
+    "counters": {
+        "donors": 467,
+        "donated": 5035
+    },
+    "texts": {
+        "name": "NGO Campaign 1",
+        "name_short": "Cmpgn 1",
+        "resume": "This is an example of campaign description.",
+        "resume_short": "CampaignDescription",
+        "activities": "",
+        "objectives": "",
+        "benefits": "",
+        "call_to_action": "",
+        "worldcoo_url": ""
+    }
+}
+```
+
+
+<aside class="notice">
+    This method is a wrapper for the <a href="http://docs.worldcoo.com/api/v3/#get-campaign-details" target="_blank">Get campaign details</a> Worldcoo API endpoint.
+</aside>
+
+_Gets campaign details_
+
+**params**
+
+* _ngo_id_ : NGO identifier
+* _campaign_id_ : Campaign identifier
+
+**campaignDetail(campaign: Campaign)**
+
+* _campaign_ : Campaign information
+
+**onError(error: ErrorBody, type: RequestType)**
+
+* _error_ : Error code, type and message
+* _type_ : CAMPAIGN_DETAILS
+
+
+
+## 4.5 - func addDonation(donation: Donation)
+
+> Response example
+
+```swift
+{
+    "id": "17a10455-120d-e767-0206",
+    "amount": 5,
+    "currency": "EUR",
+    "order_code": "9638467",
+    "campaign_counters": {
+        "total_donated": 60,
+        "target": 50000
+    }
+}
+```
 
 <aside class="notice">
     This method is a wrapper for the <a href="http://docs.worldcoo.com/api/v3/#add-donation" target="_blank">Add donation</a> Worldcoo API endpoint.
@@ -179,7 +395,22 @@ _Adds a donation_
 * _type_ : ADD_DONATION
 
 
-### 3.2.4 - func cancelDonation(donationId: String)
+## 4.6 - func cancelDonation(donationId: String)
+
+> Response example
+
+```swift
+{
+    "id": "17a10455-120d-e767-0206",
+    "amount": 5,
+    "currency": "EUR",
+    "order_code": "9638467",
+    "campaign_counters": {
+        "total_donated": 60,
+        "target": 50000
+    }
+}
+```
 
 <aside class="notice">
     This method is a wrapper for the <a href="http://docs.worldcoo.com/api/v3/#cancel-donation" target="_blank">Cancel donation</a> Worldcoo API endpoint.
@@ -201,9 +432,46 @@ _Cancels a donation_
 * _type_ : CANCEL_DONATION
 
 
-## 3.3 - Widget injection
+# 5 - Widget injection
 
-### 3.3.1 - func getInjector(container: UIView, widget: Widget, listener: InjectorListener)
+> Widget Workflow example
+
+```swift
+// Construct and create the widget object
+var sdk: WorldcooSDK = Worldcoo.getInstance sdk.initSdk(productionMode: false)
+
+// WARNING! This needs to be done on viewDidAppear function to work correctly
+var injector = sdk.getInjector(container: container!, widget: widget!, listener: self)
+
+// In your "cart" view you can inject the first step widget to let the user decide if he wants to donate
+injector?.initialStep()
+
+// The user continues the checkout process
+...
+// The user pays and the checkout process arrives to the "thanks" step
+
+// In your "thanks" view you can inject the confirmation step widget.
+injector?.confirmation()
+
+// If the user decided to donate, the donation will be sent to Worldcoo system and a thanks message will be shown
+// Otherwise, no donation will be sent and nothing will be shown
+```
+
+This is the way you can use the Worldcoo Widget inside your mobile app.
+
+Using the Worldcoo Widget is a two-steps process:
+
+* First of them is to inject the Initial Widget [_initialStep()_ method] where the user decides if he is going to donate or not and also the donation amount
+
+* Last step consists on injecting the Confirmation Widget [_confirmation()_ method], where the user choice is evaluated. So, depending on what the user selected on the first step, a donation will be set on out system or not.
+
+For sure, you'll need to know what the user choice is, so through the InjectorListener you can listen to the _change_ event while the Initial Widget is shown to act in consequence. For example, you'll need to add the selected donation amount to the cart total amount or maybe you want set a "withDonation" flag to your order.
+
+<aside class="notice">
+    You can read more about the Worldcoo Widget workflow <a href="http://docs.worldcoo.com/widget/v3/#2-step-integration" target="_blank">here</a>
+</aside> 
+
+## 5.1 - func getInjector(container: UIView, widget: Widget, listener: InjectorListener)
 
 _Returns a widget injector instance_
 
@@ -218,36 +486,11 @@ _Returns a widget injector instance_
 * A WidgetInjector instance
 
 
-### 3.3.2 - func initialStep()
+## 5.2 - func initialStep()
 
 _Injects the widget first step on the given webview._
 
 
-### 3.3.3 - func confirmation()
+## 5.3 - func confirmation()
 
 _Injects the widget second step on the given webview._
-
-
-## 3.4 - Example
-
-```swift
-// SDK initialization
-var sdk: WorldcooSDK = Worldcoo.getInstance sdk.initSdk(productionMode: false)
-
-// Donor API Client
-sdk.getAPIClient().getAvailableNGOs(listener: self) // Being call from a controller that implements NativeListener interface
-
-// This will be received from callback:
-onAvailableNGOs(ngos: [NGO])
-
-// If there are errors
-onError(error: ErrorBody, request: RequestType)
-
-// Same way to proceed with all API methods
-
-// Injector
-// Construct and create the widget object
-// WARNING! This needs to be done on viewDidAppear function to work correctly var injector = sdk.getInjector(
-container: container!, widget: widget!, listener: self)
-injector?. injectWidgetStep1() injector?. injectWidgetStep2()
-```
