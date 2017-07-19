@@ -20,7 +20,7 @@ The Worldcoo iOS SDK allows to this Operating System developers to interact with
 
 Follow these steps to include the Worldcoo SDK inside your app:
 
-* Download the SDK from <a href="https://cdn.worldcoo.com/download/sdk/ios/Worldcoo-ios-1.0.zip">here</a> and decompress the .zip file
+* Download the SDK from <a href="https://cdn.worldcoo.com/download/sdk/ios/Worldcoo-ios-latest.zip">here</a> and decompress the .zip file
 * In Xcode, go to General in the project settings
 * Create a folder /lib and include the framework on it
 * Add the framework as embedded framework
